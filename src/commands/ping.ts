@@ -1,5 +1,5 @@
-import { ApplicationCommandRegistry, Awaitable, ChatInputCommand, Command } from "@sapphire/framework";
-import { ChatInputCommandInteraction } from "discord.js";
+import { Command } from "@sapphire/framework";
+import { check, report } from "../util";
 
 export class PingCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -15,6 +15,11 @@ export class PingCommand extends Command {
   public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
     await interaction.deferReply();
     let a = Date.now() - interaction.createdTimestamp;
-    await interaction.editReply({ content: a + "ms" });
+    try {
+      await check(interaction);
+      await interaction.editReply({ content: a + "ms" });
+    } catch (e) {
+      await report(interaction, e);
+    }
   }
 }

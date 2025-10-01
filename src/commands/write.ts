@@ -1,6 +1,6 @@
 import { Command } from "@sapphire/framework";
-import { readdir, readFile, writeFile } from "node:fs/promises";
-import { report, respond_lengthy } from "../util";
+import { writeFile } from "node:fs/promises";
+import { report, check } from "../util";
 
 export class WriteCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -21,6 +21,7 @@ export class WriteCommand extends Command {
     const path = interaction.options.getString('path', true);
     const content = interaction.options.getAttachment('content', true);
     try {
+      await check(interaction);
       const req = await fetch(content.url);
       const data = Buffer.from(await req.arrayBuffer());
 

@@ -1,6 +1,5 @@
 import { Command } from "@sapphire/framework";
-import { readdir } from "node:fs/promises";
-import { report, respond_lengthy } from "../util";
+import { check, report, respond_lengthy } from "../util";
 import { execSync } from "node:child_process";
 
 export class ListCommand extends Command {
@@ -22,6 +21,7 @@ export class ListCommand extends Command {
     const query = interaction.options.getString('query', false);
     const limit = interaction.options.getInteger('limit', false);
     try {
+      await check(interaction);
       const output = execSync(`ps aux ${query ? `| grep ${query}` : ''} ${limit ? `| head -n ${limit}` : ''}`);
       await interaction.editReply(respond_lengthy("", output.toString('utf-8'), 'ansi'));
     } catch (e) { await report(interaction, e); }

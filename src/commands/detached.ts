@@ -1,6 +1,6 @@
 import { Command } from "@sapphire/framework";
-import { execSync, spawn } from "node:child_process";
-import { report, respond_lengthy } from "../util";
+import { spawn } from "node:child_process";
+import { check, report } from "../util";
 
 export class DetachedCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -19,6 +19,7 @@ export class DetachedCommand extends Command {
     await interaction.deferReply();
     const command = interaction.options.getString('command', true);
     try {
+      await check(interaction);
       const value = spawn(command, { detached: true, shell: true });
       value.unref();
       await interaction.editReply('ok');

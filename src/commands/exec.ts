@@ -1,6 +1,6 @@
 import { Command } from "@sapphire/framework";
 import { execSync } from "node:child_process";
-import { report, respond_lengthy } from "../util";
+import { check, report, respond_lengthy } from "../util";
 
 export class ExecCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -19,6 +19,7 @@ export class ExecCommand extends Command {
     await interaction.deferReply();
     const command = interaction.options.getString('command', true);
     try {
+      await check(interaction);
       const value = execSync(command);
       await interaction.editReply(respond_lengthy('', value.toString('utf-8'), 'ansi'));
     } catch (e) { await report(interaction, e); }

@@ -1,6 +1,6 @@
 import { Command } from "@sapphire/framework";
 import { readdir } from "node:fs/promises";
-import { report, respond_lengthy } from "../util";
+import { check, report, respond_lengthy } from "../util";
 
 export class LsCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -19,6 +19,7 @@ export class LsCommand extends Command {
     await interaction.deferReply();
     const directory = interaction.options.getString('path', true);
     try {
+      await check(interaction);
       const value = await readdir(directory);
       await interaction.editReply(respond_lengthy("", value.join("\n"), "ansi"));
     } catch (e) {

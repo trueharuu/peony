@@ -1,6 +1,6 @@
 import { Command } from "@sapphire/framework";
-import { readdir, readFile, stat } from "node:fs/promises";
-import { report, respond_lengthy } from "../util";
+import { stat } from "node:fs/promises";
+import { check, report, respond_lengthy } from "../util";
 
 export class StatCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -19,6 +19,7 @@ export class StatCommand extends Command {
     await interaction.deferReply();
     const path = interaction.options.getString('path', true);
     try {
+      await check(interaction);
       const value = await stat(path);
 
       let z = '';

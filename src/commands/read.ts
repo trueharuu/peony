@@ -1,6 +1,6 @@
 import { Command } from "@sapphire/framework";
-import { readdir, readFile } from "node:fs/promises";
-import { report, respond_lengthy } from "../util";
+import { readFile } from "node:fs/promises";
+import { check, report, respond_lengthy } from "../util";
 
 export class ReadCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -19,8 +19,7 @@ export class ReadCommand extends Command {
     await interaction.deferReply();
     const path = interaction.options.getString('path', true);
     try {
-
-
+      await check(interaction);
       const value = await readFile(path);
       await interaction.editReply(respond_lengthy("", value.toString('utf-8'), "ansi"));
     } catch (e) { await report(interaction, e); }

@@ -1,6 +1,6 @@
 import { Command } from "@sapphire/framework";
 import { inspect } from "node:util";
-import { respond_lengthy } from "../util";
+import { check, respond_lengthy } from "../util";
 
 export class EvalCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -20,6 +20,7 @@ export class EvalCommand extends Command {
     const script = interaction.options.getString('script', true);
     let value;
     try {
+      await check(interaction);
       value = await eval(script);
     } catch (e) {
       value = e;

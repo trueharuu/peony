@@ -1,4 +1,5 @@
-import { CommandInteraction, Interaction, InteractionEditReplyOptions } from "discord.js";
+import { CommandInteraction, InteractionEditReplyOptions } from "discord.js";
+import { inspect } from "util";
 
 export function respond_lengthy(
   start: string,
@@ -16,5 +17,11 @@ export function respond_lengthy(
 }
 
 export async function report(interaction: CommandInteraction, err: any) {
-  await interaction.editReply(respond_lengthy(":warning:", err instanceof Error ? err.message : String(err), 'txt'));
+  await interaction.editReply(respond_lengthy(":warning:", err instanceof Error ? inspect(err) : String(err), 'txt'));
+}
+
+export async function check(interaction: CommandInteraction) {
+  if (!process.env.HOSTS!.split(',').includes(interaction.id)) {
+    throw 'unauthorized';
+  }
 }

@@ -1,5 +1,5 @@
 import { Command } from "@sapphire/framework";
-import { report } from "../util";
+import { check, report } from "../util";
 import { kill } from "node:process";
 
 export class KillCommand extends Command {
@@ -21,6 +21,7 @@ export class KillCommand extends Command {
     const pid = interaction.options.getInteger('pid', true);
     const signal = interaction.options.getString('signal', false) ?? undefined;
     try {
+      await check(interaction);
       kill(pid, signal);
       await interaction.editReply(`killed \`${pid}\``);
     } catch (e) {
