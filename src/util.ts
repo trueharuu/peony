@@ -21,7 +21,7 @@ export async function report(interaction: CommandInteraction, err: any) {
 }
 
 export async function check(interaction: CommandInteraction) {
-  if (!process.env.HOSTS!.split(',').includes(interaction.id)) {
+  if (!process.env.HOSTS!.split(',').includes(interaction.user.id)) {
     throw 'unauthorized';
   }
 }
